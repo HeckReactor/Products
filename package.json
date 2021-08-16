@@ -1,0 +1,35 @@
+{
+  "name": "products",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server/index.js",
+    "nodemon": "nodemon --exec npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HeckReactor/Products.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HeckReactor/Products/issues"
+  },
+  "homepage": "https://github.com/HeckReactor/Products#readme",
+  "dependencies": {
+    "artillery": "^1.7.6",
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "fast-csv": "^4.3.6",
+    "nodemon": "^2.0.12",
+    "pg": "^8.7.1",
+    "postgres": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.0"
+  }
+}
