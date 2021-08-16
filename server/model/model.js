@@ -31,24 +31,26 @@ const getStyles = (params, callback) => {
                 'name', s.name,
                 'original_price', s.original_price,
                 'sale_price', s.sale_price,
-                'default?', s.default?,
-                'photos', select (jsonb_agg(jsonb_build_object (
+                'default?', s.default_style,
+                'photos', ( select (jsonb_agg(jsonb_build_object (
                     'thumbnail_url', h.thumbnail_url,
                     'url', h.url
                 ))) FROM photos h
-                    where styleid = s.style_id, 
-                'skus', select (jsonb_build_object (
-                    k.style_id, select (jsonb_build_object (
-                        quantity, k.quantity,
-                        size, k.size
+                    where style_id = s.style_id
+					), 
+                'skus', (select (jsonb_build_object (
+                    k.style_id, (select (jsonb_build_object (
+                        'quantity', k.quantity,
+                        'size', k.size
                     )) from skus k 
-                       where skus = s.style_id
-                ))
+                       where style_id = s.style_id
+                ))) FROM skus k LIMIT 1
+				)
             ))) 
                 FROM styles s 
                 WHERE productid = $1
         )
-     )`, [product_id]), (err, data) => {
+     ) `, [product_id]), (err, data) => {
          if(err) {
              console.log('error querying getStyles', err)
          } else {
