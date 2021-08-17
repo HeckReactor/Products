@@ -23,8 +23,8 @@ const getProducts = (params, callback) => {
 };
 
 const getStyles = (params, callback) => {
-    client.query(`SELECT jsonb_build_object (
-        'id', $1,
+    client.query(`SELECT (jsonb_build_object (
+        'id', $1::integer,
         'results', (
             select (jsonb_agg(jsonb_build_object (
                 'style_id', s.style_id,
@@ -32,36 +32,42 @@ const getStyles = (params, callback) => {
                 'original_price', s.original_price,
                 'sale_price', s.sale_price,
                 'default?', s.default_style,
-                'photos', ( select (jsonb_agg(jsonb_build_object (
-                    'thumbnail_url', h.thumbnail_url,
-                    'url', h.url
-                ))) FROM photos h
-                    where style_id = s.style_id
-					), 
-                'skus', (select (jsonb_build_object (
-                    k.style_id, (select (jsonb_build_object (
-                        'quantity', k.quantity,
-                        'size', k.size
-                    )) from skus k 
-                       where style_id = s.style_id
-                ))) FROM skus k LIMIT 1
+                'photos', ( 
+					select (jsonb_agg(jsonb_build_object (
+                    	'thumbnail_url', h.thumbnail_url,
+						'url', h.url
+                	))) 
+					FROM photos h
+                    where h.style_id = s.style_id
+				), 
+                'skus', (
+					select (jsonb_object_agg (
+                    	k.id, (
+							select (jsonb_build_object (
+                        		'quantity', k.quantity,
+                        		'size', k.size
+                    		))
+						)))
+					from skus k
+					where k.style_id = s.style_id
 				)
-            ))) 
-                FROM styles s 
-                WHERE productid = $1
-        )
-     ) `, [product_id]), (err, data) => {
+			)))
+			FROM styles s 
+			WHERE s.productid = $1::integer
+		)
+	)
+)`, [params.product_id], (err, data) => {
          if(err) {
              console.log('error querying getStyles', err)
          } else {
-             callback(null, data)
+             callback(null, data.rows[0].jsonb_build_object)
          }
-     }
+     })
 }
 
 const getProductId = (params, callback) => {
   client.query(`select jsonb_build_object (
-	'id', p.product_id,
+	'id', p.product_id, 
 	'name', p.name,
 	'slogan', p.slogan,
 	'description', p.description,
@@ -98,4 +104,4 @@ where product_id = $1`, [params.product_id], (err, data) => {
 
 module.exports.getProducts = getProducts;
 module.exports.getProductId = getProductId;
-// module.exports.getFeatures = getFeatures;
+module.exports.getStyles = getStyles;

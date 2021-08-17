@@ -39,7 +39,8 @@ CREATE TABLE photos (
 CREATE TABLE skus (
 	quantity int NOT NULL,
 	size TEXT NOT NULL,
-	style_id int NOT NULL
+	style_id int NOT NULL,
+	id int NOT NULL
 );
 
 ALTER TABLE features ADD CONSTRAINT features_fk0 FOREIGN KEY (id) REFERENCES products(product_id);
@@ -52,8 +53,12 @@ ALTER TABLE photos ADD CONSTRAINT photos_fk0 FOREIGN KEY (style_id) REFERENCES s
 
 ALTER TABLE skus ADD CONSTRAINT skus_fk2 FOREIGN KEY (style_id) REFERENCES styles(style_id);
 
+create index skus_style_id on styles(style_id);
 
+create index styles_productid on products(product_id);
 
+create index related_products_id on products(product_id);
 
+create index photos_style_id on styles(style_id);
 
-
+create index features_id on products(product_id);

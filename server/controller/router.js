@@ -38,8 +38,7 @@ router.get('/products/:product_id/styles', (req, res) => {
       res.status(500).send(['couldnt get product id to route'], err);
     } else {
       // write model functions for getting photos and skus for every style. 
-
-      
+      res.status(500).send(data)
     }
   });
 })
