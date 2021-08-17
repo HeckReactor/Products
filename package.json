@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./server/index.js",
-    "nodemon": "nodemon --exec npm start"
+    "nodemon": "nodemon --exec npm start",
+    "artilleryTest": "artillery run config.yml -o styles10_1000"
   },
   "repository": {
     "type": "git",

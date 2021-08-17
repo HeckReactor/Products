@@ -4,7 +4,7 @@ const router = express.Router();
 const model = require('../model/model.js');
 
 router.get('/products', (req, res) => {
-  console.log(req.query);
+
   model.getProducts(req.query, (err, data) => {
     if (err) {
       res.status(500).send(['error while routing get'], err);

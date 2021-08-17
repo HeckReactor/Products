@@ -96,8 +96,7 @@ const getRelated = (params, callback) => {
   client.query(`
     select (jsonb_agg(
       r.related_product_id
-    )
-    )
+    ))
     FROM related_products r 
     where id=$1
     `, [params.product_id], (err, data) => {
