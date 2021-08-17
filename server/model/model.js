@@ -92,6 +92,23 @@ where product_id = $1`, [params.product_id], (err, data) => {
   });
 };
 
+const getRelated = (params, callback) => {
+  client.query(`
+    select (jsonb_agg(
+      r.related_product_id
+    )
+    )
+    FROM related_products r 
+    where id=$1
+    `, [params.product_id], (err, data) => {
+    if (err) {
+      console.log('error in model getProductId', err);
+    } else {
+      callback(null, data.rows[0].jsonb_agg);
+    }
+  });
+};
+
 // const getFeatures = (params, callback) => {
 //   client.query(`SELECT feature, value FROM features WHERE id = ${params.product_id}`, (err, data) => {
 //     if (err) {
@@ -105,3 +122,4 @@ where product_id = $1`, [params.product_id], (err, data) => {
 module.exports.getProducts = getProducts;
 module.exports.getProductId = getProductId;
 module.exports.getStyles = getStyles;
+module.exports.getRelated = getRelated;

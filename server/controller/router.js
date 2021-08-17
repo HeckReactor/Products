@@ -38,9 +38,19 @@ router.get('/products/:product_id/styles', (req, res) => {
       res.status(500).send(['couldnt get product id to route'], err);
     } else {
       // write model functions for getting photos and skus for every style. 
-      res.status(500).send(data)
+      res.status(200).send(data)
     }
   });
+})
+
+router.get('/products/:product_id/related', (req, res) => {
+  model.getRelated(req.params, (err, data) => {
+    if(err) {
+      res.status(500).send(['couldnt get related product'], err);
+    } else {
+      res.status(200).send(data);
+    }
+  })
 })
 // app.get('/display', (req, res) => {
 //   Calls.getDisplay(req.query.productId)
